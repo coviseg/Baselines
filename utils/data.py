@@ -39,3 +39,25 @@ class Covid(tf.keras.utils.Sequence):
           if path[:4] == "CT_N":
             y[j] = 1          
         return x/255., y
+
+def generate_train_test(data_path, batch_size, val_times_batchsize, shuffle=True):
+  """ Generates train and test dataset given all data paths, batchsize, and the
+  number of times that the validation size is compared to the batch size, this 
+  is done because if the validation size and batch size are not multiples we do 
+  not validate every sample each pass.
+
+  Args:
+    data_path (list): list having paths for all images.
+    batch_size (int): batch size for training.
+    bal_times_batchsize (int): Number of times that we multiply the batch size
+                               to generate the validation dataset.
+    shuffle (bool): If you want to shuffle your dataset. (default=True)
+  """
+  
+  if shuffle:
+    random.Random(42).shuffle(all_paths)
+  val_samples = batch_size*times_batchsize   
+  train_paths = all_paths[val_samples:]
+  val_paths = all_paths[:val_samples]
+
+  return train_paths, val_paths
