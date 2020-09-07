@@ -1,5 +1,7 @@
 import os
 from tensorflow.keras.preprocessing.image import load_img
+import tensorflow as tf
+import random
 
 def get_paths(dir_name):
   """ Get paths for all files in a given directory.
@@ -10,8 +12,8 @@ def get_paths(dir_name):
   """
   return sorted(
         [
-        os.path.join(covid_dir, fname)
-        for fname in os.listdir(covid_dir)
+        os.path.join(dir_name, fname)
+        for fname in os.listdir(dir_name)
         if fname.endswith(".png")
         ])
 
@@ -55,9 +57,9 @@ def generate_train_test(data_path, batch_size, val_times_batchsize, shuffle=True
   """
   
   if shuffle:
-    random.Random(42).shuffle(all_paths)
-  val_samples = batch_size*times_batchsize   
-  train_paths = all_paths[val_samples:]
-  val_paths = all_paths[:val_samples]
+    random.Random(42).shuffle(data_path)
+  val_samples = batch_size*val_times_batchsize   
+  train_paths = data_path[val_samples:]
+  val_paths = data_path[:val_samples]
 
   return train_paths, val_paths
